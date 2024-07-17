@@ -16,8 +16,8 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - port: 80
-      targetPort: 80
+    - port: 8080
+      targetPort: 8080
       protocol: TCP
       name: tgi
   selector:
@@ -95,7 +95,11 @@ spec:
             - name: MODEL_ID
               value: ise-uiuc/Magicoder-S-DS-6.7B
             - name: PORT
-              value: "80"
+              value: "8080"
+            - name: NUMBA_CACHE_DIR
+              value: /data
+            - name: HF_TOKEN
+              value: "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"
           securityContext: {}
           image: "ghcr.io/huggingface/text-generation-inference:1.4"
           imagePullPolicy: IfNotPresent
@@ -104,14 +108,14 @@ spec:
               name: model-volume
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 8080
               protocol: TCP
           resources: {}
       volumes:
-        - name: model-volume
-          hostPath:
-            path: /mnt
-            type: Directory
+      - emptyDir:
+          sizeLimit: 50Gi
+        name: model-volume
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -140,18 +144,15 @@ spec:
         - name: codegen
           env:
             - name: TGI_LLM_ENDPOINT
-              value: "http://codegen-tgi:80"
+              value: "http://codegen-tgi:8080"
             - name: HUGGINGFACEHUB_API_TOKEN
-              value: "insert-your-huggingface-token-here"
-            - name: http_proxy
-              value:
-            - name: https_proxy
-              value:
-            - name: no_proxy
-              value:
-
+              value: "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"
+            - name: PYTHONPATH
+              value: /home/user/.local/lib/python3.11/site-packages:/home/user
+            - name: HOME
+              value: /tmp/home
           securityContext: {}
-          image: "opea/llm-tgi:latest"
+          image: "image-registry.openshift-image-registry.svc:5000/codegen/llm-tgi"
           imagePullPolicy: IfNotPresent
           ports:
             - name: llm-uservice
@@ -161,11 +162,18 @@ spec:
             exec:
               command:
                 - curl
-                - http://codegen-tgi:80
+                - http://codegen-tgi:8080
             initialDelaySeconds: 5
             periodSeconds: 5
             failureThreshold: 120
+          volumeMounts:
+          - mountPath: /tmp/home
+            name: local-dir
           resources: {}
+      volumes:
+      - emptyDir:
+          sizeLimit: 5Gi
+        name: local-dir
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -196,7 +204,7 @@ spec:
             - name: LLM_SERVICE_HOST_IP
               value: codegen-llm-uservice
           securityContext: null
-          image: "opea/codegen:latest"
+          image: "image-registry.openshift-image-registry.svc:5000/codegen/codegen"
           imagePullPolicy: IfNotPresent
           ports:
             - name: codegen
