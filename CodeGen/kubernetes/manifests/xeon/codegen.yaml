@@ -99,7 +99,7 @@ spec:
             - name: NUMBA_CACHE_DIR
               value: /data
             - name: HF_TOKEN
-              value: "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"
+              value: "insert-your-huggingface-token-here"
           securityContext: {}
           image: "ghcr.io/huggingface/text-generation-inference:1.4"
           imagePullPolicy: IfNotPresent
@@ -142,15 +142,24 @@ spec:
       securityContext: {}
       containers:
         - name: codegen
+          command:
+          - /bin/bash
+          - -c
+          - |
+            cp /usr/lib/ssl/cert.pem /tmp/bundle.crt && \
+            cat /rhoai-ca/tls.crt  | tee -a '/tmp/bundle.crt' && \
+            python llm.py
           env:
             - name: TGI_LLM_ENDPOINT
-              value: "http://codegen-tgi:8080"
+              value: https://magicoder-predictor-codegen-tgi.apps.rojo.igk.internal
             - name: HUGGINGFACEHUB_API_TOKEN
-              value: "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"
+              value: "insert-your-huggingface-token-here"
             - name: PYTHONPATH
               value: /home/user/.local/lib/python3.11/site-packages:/home/user
             - name: HOME
               value: /tmp/home
+            - name: SSL_CERT_FILE
+              value: /tmp/bundle.crt
           securityContext: {}
           image: "image-registry.openshift-image-registry.svc:5000/codegen/llm-tgi"
           imagePullPolicy: IfNotPresent
@@ -162,18 +171,24 @@ spec:
             exec:
               command:
                 - curl
-                - http://codegen-tgi:8080
+                - https://magicoder-predictor-codegen-tgi.apps.rojo.igk.internal
             initialDelaySeconds: 5
             periodSeconds: 5
             failureThreshold: 120
           volumeMounts:
           - mountPath: /tmp/home
             name: local-dir
+          - mountPath: /rhoai-ca
+            name: odh-ca-bundle
           resources: {}
       volumes:
       - emptyDir:
           sizeLimit: 5Gi
         name: local-dir
+      - name: odh-ca-bundle
+        secret:
+          defaultMode: 420
+          secretName: rhoai-ca-bundle
 ---
 apiVersion: apps/v1
 kind: Deployment
