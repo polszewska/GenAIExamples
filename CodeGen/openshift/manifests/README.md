@@ -80,7 +80,7 @@ export TGI_LLM_ENDPOINT="YourURL"
 sed -i "s/insert-your-tgi-url-here/${TGI_LLM_ENDPOINT}/g" codegen.yaml
 ```
 
-2. Build docker images locally
+2. Build docker images locally (https://github.com/opea-project/GenAIExamples/tree/main/CodeGen/docker/xeon#-build-docker-images)
 
 - LLM Docker Image:
 ```
@@ -126,7 +126,7 @@ oc apply -f codegen.yaml
 oc expose svc codegen
 ```
 
-6. Check the *codegen* route with command `oc get routes` and update the route in *server-ui.yaml* file 
+6. Check the *codegen* route with command `oc get routes` and update the route in *server-ui.yaml* file: 
 ```
 cd GenAIExamples/CodeGen/openshift/manifests/xeon
 export CODEGEN_ROUTE="YourCodegenRoute"

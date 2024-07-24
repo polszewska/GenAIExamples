@@ -21,7 +21,7 @@ spec:
         - name: HF_HUB_CACHE
           value: /mnt/models
         - name: HUGGING_FACE_HUB_TOKEN
-          value: <insert-your-huggingface-token-here>
+          value: "insert-your-huggingface-token-here"
         - name: BATCH_BUCKET_SIZE
           value: "22"
         - name: PREFILL_BATCH_BUCKET_SIZE
