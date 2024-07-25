@@ -9,8 +9,7 @@
 ```
 cd GenAIExamples/CodeGen/openshift/manifests/xeon
 export HUGGINGFACEHUB_API_TOKEN="YourOwnToken"
-sed -i "s/insert-your-huggingface-token-here/${HUGGINGFACEHUB_API_TOKEN}/g" codegen.yaml
-sed -i "s/insert-your-huggingface-token-here/${HUGGINGFACEHUB_API_TOKEN}/g" servingruntime-magicoder.yaml
+sed -i "s/insert-your-huggingface-token-here/${HUGGINGFACEHUB_API_TOKEN}/g" codegen.yaml servingruntime-magicoder.yaml
 ```
 You can also customize the "MODEL_ID" and "model-volume".
 
@@ -63,13 +62,11 @@ for filename in files:
 ```
 7. Back to **Red Hat OpenShift AI** dashboard, go to **Settings** -> **Serving runtimes** and click **Add serving runtime**. Choose *Single-model serving platform* and *REST* as API protocol. Upload the file or copy the content of *servingruntime-magicoder.yaml*.
 
-8. Go to your project, then "Models" tab and click **Deploy model** under *Single-model serving platform*. Fill the **Name**, choose newly created **Serving runtime**: *ise-uiuc/Magicoder-S-DS-6.7B on CPU*, **Model framework**: *llm* and change **Model server size** to *Custom*: 16 CPUs and 64 Gi memory. Under **Model location** choose *Existing data connection* and **Path**: *models*. Click **Deploy**.
+8. Go to your project, then "Models" tab and click **Deploy model** under *Single-model serving platform*. Fill the **Name**, choose newly created **Serving runtime**: *ise-uiuc/Magicoder-S-DS-6.7B on CPU*, **Model framework**: *llm* and change **Model server size** to *Custom*: 16 CPUs and 64 Gi memory. Under **Model location** choose *Existing data connection* and **Path**: *models*. Click **Deploy**. It takes about 10 minutes to get *Loaded* status.
 
 ## Deploy CodeGen On Xeon
 
-1. Update TGI endpoint
-
-Login to OpenShift CLI and find the URL of TGI_LLM_ENDPOINT:
+1. Login to OpenShift CLI, go to your project and find the URL of TGI_LLM_ENDPOINT:
 ```
 oc get service.serving.knative.dev
 ```
@@ -77,7 +74,7 @@ Update the TGI_LLM_ENDPOINT in your repository:
 ```
 cd GenAIExamples/CodeGen/openshift/manifests/xeon
 export TGI_LLM_ENDPOINT="YourURL"
-sed -i "s/insert-your-tgi-url-here/${TGI_LLM_ENDPOINT}/g" codegen.yaml
+sed -i "s#insert-your-tgi-url-here#${TGI_LLM_ENDPOINT}#g" codegen.yaml
 ```
 
 2. Build docker images locally (https://github.com/opea-project/GenAIExamples/tree/main/CodeGen/docker/xeon#-build-docker-images)
@@ -108,6 +105,8 @@ podman login -u <user> -p $(oc whoami -t) <openshift-image-registry_route> --tls
 podman tag <image_id> <openshift-image-registry_route>/<namespace>/<image_name>:<tag>
 podman push <openshift-image-registry_route>/<namespace>/<image_name>:<tag>
 ```
+To verify run the command: `oc get istag`.
+
 4. Update images names in *codegen.yaml*
 
 ```
@@ -115,29 +114,31 @@ cd GenAIExamples/CodeGen/openshift/manifests/xeon
 export IMAGE_LLM_TGI="YourImage"
 export IMAGE_CODEGEN="YourImage"
 export IMAGE_CODEGEN_UI="YourImage"
-sed -i "s/insert-your-image-llm-tgi/${IMAGE_LLM_TGI}/g" codegen.yaml
-sed -i "s/insert-your-image-codegen/${IMAGE_CODEGEN}/g" codegen.yaml
-sed -i "s/insert-your-image-codege-ui/${IMAGE_CODEGEN_UI}/g" codegen.yaml
+sed -i "s#insert-your-image-llm-tgi#${IMAGE_LLM_TGI}#g" codegen.yaml
+sed -i "s#insert-your-image-codegen#${IMAGE_CODEGEN}#g" codegen.yaml
+sed -i "s#insert-your-image-codegen-ui#${IMAGE_CODEGEN_UI}#g" ui-server.yaml
 ```
 
-5. Deploy CodeGen with command:
+5. Create *rhoai-ca-bundle* secret:
+```
+oc create secret generic rhoai-ca-bundle --from-literal=tls.crt="$(oc extract secret/knative-serving-cert -n istio-system --to=- --keys=tls.crt)"
+```
+
+6. Deploy CodeGen with command:
 ```
 oc apply -f codegen.yaml
-oc expose svc codegen
 ```
 
-6. Check the *codegen* route with command `oc get routes` and update the route in *server-ui.yaml* file: 
+7. Check the *codegen* route with command `oc get routes` and update the route in *server-ui.yaml* file: 
 ```
 cd GenAIExamples/CodeGen/openshift/manifests/xeon
 export CODEGEN_ROUTE="YourCodegenRoute"
 sed -i "s/insert-your-codegen-route/${CODEGEN_ROUTE}/g" ui-server.yaml
 ```
 
-7. Deploy UI with command:
+8. Deploy UI with command:
 ```
 oc apply -f ui-server.yaml
-oc expose deployment ui-server
-oc expose svc ui-server
 ```
 
 ## Verify Services

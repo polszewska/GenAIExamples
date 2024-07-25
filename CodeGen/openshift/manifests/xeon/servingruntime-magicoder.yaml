@@ -5,7 +5,7 @@ labels:
 metadata:
   annotations:
     openshift.io/display-name: ise-uiuc/Magicoder-S-DS-6.7B on CPU
-  name: tgi-on-cpu-Magicoder
+  name: tgi-on-cpu-magicoder
 spec:
   containers:
     - args:

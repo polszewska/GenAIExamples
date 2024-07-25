@@ -30,7 +30,7 @@ spec:
         - env:
             - name: HOME
               value: /tmp/temp-data
-            - name: BASE_URL
+            - name: BASIC_URL
               value: http://insert-your-codegen-route/v1/codegen
           image: "insert-your-image-codegen-ui"
           name: ui-server
@@ -45,4 +45,32 @@ spec:
       volumes:
         - name: temp-data
           emptyDir: {}
-
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  labels:
+    io.kompose.service: ui-server
+  name: ui-server
+spec:
+  port:
+    targetPort: 5173
+  to:
+    kind: Service
+    name: ui-server
+    weight: 100
+  wildcardPolicy: None
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    io.kompose.service: ui-server
+  name: ui-server
+spec:
+  ports:
+    - name: "5173"
+      port: 5173
+      targetPort: 5173
+  selector:
+    io.kompose.service: ui-server

@@ -154,3 +154,22 @@ spec:
               containerPort: 7778
               protocol: TCP
           resources: null
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  labels:
+    app.kubernetes.io/instance: codegen
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: codegen
+    app.kubernetes.io/version: 1.0.0
+    helm.sh/chart: codegen-0.1.0
+  name: codegen
+spec:
+  port:
+    targetPort: codegen
+  to:
+    kind: Service
+    name: codegen
+    weight: 100
+  wildcardPolicy: None
