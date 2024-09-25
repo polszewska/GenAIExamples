@@ -113,7 +113,7 @@ podman push <openshift-image-registry_route>/<namespace>/<image_name>:<tag>
 ```
 To verify run the command: `oc get istag`.
 
-4. Update images names in manifest files:
+4. Use the *IMAGE REFERENCE* from previous step to update images names in manifest files:
 
 ```
 cd GenAIExamples/CodeGen/openshift-rhoai/manifests/xeon
