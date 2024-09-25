@@ -50,7 +50,7 @@ objects:
             value: "5"
           - name: OMPI_MCA_btl_vader_single_copy_mechanism
             value: none
-        image: ghcr.io/huggingface/text-generation-inference:1.4
+        image: ghcr.io/huggingface/text-generation-inference:2.1.0
         livenessProbe:
           exec:
             command:
