@@ -43,12 +43,12 @@ docker build -t opea/codegen-ui:latest --build-arg https_proxy=$https_proxy --bu
 ```
 To verify run the command: `docker images`.
 
-2. Login to podman, tag the images and push it to image registry with following commands:
+2. Login to docker, tag the images and push it to image registry with following commands:
 
 ```
-podman login -u <user> -p $(oc whoami -t) <openshift-image-registry_route> --tls-verify=false
-podman tag <image_id> <openshift-image-registry_route>/<namespace>/<image_name>:<tag>
-podman push <openshift-image-registry_route>/<namespace>/<image_name>:<tag>
+docker login -u <user> -p $(oc whoami -t) <openshift-image-registry_route> --tls-verify=false
+docker tag <image_id> <openshift-image-registry_route>/<namespace>/<image_name>:<tag>
+docker push <openshift-image-registry_route>/<namespace>/<image_name>:<tag>
 ```
 To verify run the command: `oc get istag`.
 
