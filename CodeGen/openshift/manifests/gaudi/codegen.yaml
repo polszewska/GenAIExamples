@@ -103,6 +103,11 @@ spec:
           securityContext: {}
           image: "ghcr.io/huggingface/tgi-gaudi:2.0.1"
           imagePullPolicy: IfNotPresent
+          args:
+          - "--max-input-length"
+          - "1024"
+          - "--max-total-tokens"
+          - "2048"
           volumeMounts:
             - mountPath: /data
               name: model-volume
