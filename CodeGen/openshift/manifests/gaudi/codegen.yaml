@@ -100,6 +100,8 @@ spec:
               value: /data
             - name: HF_TOKEN
               value: "insert-your-huggingface-token-here"
+            - name: PAD_SEQUENCE_TO_MULTIPLE_OF
+              value: "1024"
           securityContext: {}
           image: "ghcr.io/huggingface/tgi-gaudi:2.0.1"
           imagePullPolicy: IfNotPresent
