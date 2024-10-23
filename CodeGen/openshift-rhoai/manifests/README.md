@@ -23,11 +23,20 @@ sed -i "s/insert-your-huggingface-token-here/${HFTOKEN}/g" codegen.yaml servingr
 
 ## Deploy model in Red Hat Openshift AI
 
-1. Log in to OpenShift CLI and run following commands to create new serving runtime:
+1. Log in to OpenShift CLI and run following commands to create new serving runtime.
+
+On Xeon:
 ```
 cd GenAIExamples/CodeGen/openshift-rhoai/manifests/xeon
 oc apply -f servingruntime-magicoder.yaml
 ```
+
+On Gaudi:
+```
+cd GenAIExamples/CodeGen/openshift-rhoai/manifests/gaudi
+oc apply -f servingruntime-codellama.yaml
+```
+
 Verify if template has been created with ```oc get template -A | grep tgi-magicoder``` command.
 
 2. Find the route for **Red Hat OpenShift AI** dashboard with below command and open it in the browser:
