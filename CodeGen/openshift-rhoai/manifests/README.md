@@ -94,15 +94,24 @@ for filename in files:
 6. Go to your project in **Red Hat OpenShift AI** dashboard, then "Models" tab and click **Deploy model** under *Single-model serving platform*. Fill the **Name**, choose newly created **Serving runtime**: *Text Generation Inference Magicoder-S-DS-6.7B on CPU* (for Xeon) or *Text Generation Inference CodeLlama-7b-hf on Gaudi* (for Gaudi), **Model framework**: *llm* and change **Model server size** to *Custom*: 16 CPUs and 64 Gi memory. For deployment with Gaudi select proper **Accelerator**. Click the checkbox to create external route in **Model route** section and uncheck the token authentication. Under **Model location** choose *New data connection* and fill all required fields for s3 access, **Bucket** *first.bucket* and **Path**: *models*. Click **Deploy**. It takes about 10 minutes to get *Loaded* status.\
 If it's not going to *Loaded* status and revision changed status to "ProgressDeadlineExceeded" (``oc get revision``), scale model deployment to 0 and than to 1 with command ``oc scale deployment.apps/<model_deployment_name> --replicas=1`` and wait about 10 minutes for deployment.
 
-## Deploy CodeGen On Xeon
+## Deploy CodeGen
 
 1. Login to OpenShift CLI, go to your project and find the URL of TGI_LLM_ENDPOINT:
 ```
 oc get service.serving.knative.dev
 ```
-Update the TGI_LLM_ENDPOINT in your repository:
+Update the TGI_LLM_ENDPOINT in your repository.
+
+On Xeon:
 ```
 cd GenAIExamples/CodeGen/openshift-rhoai/manifests/xeon
+export TGI_LLM_ENDPOINT="YourURL"
+sed -i "s#insert-your-tgi-url-here#${TGI_LLM_ENDPOINT}#g" codegen.yaml
+```
+
+On Gaudi:
+```
+cd GenAIExamples/CodeGen/openshift-rhoai/manifests/gaudi
 export TGI_LLM_ENDPOINT="YourURL"
 sed -i "s#insert-your-tgi-url-here#${TGI_LLM_ENDPOINT}#g" codegen.yaml
 ```
@@ -137,10 +146,22 @@ docker push <openshift-image-registry_route>/<namespace>/<image_name>:<tag>
 ```
 To verify run the command: `oc get istag`.
 
-4. Use the *IMAGE REFERENCE* from previous step to update images names in manifest files:
+4. Use the *IMAGE REFERENCE* from previous step to update images names in manifest files.
 
+On Xeon:
 ```
 cd GenAIExamples/CodeGen/openshift-rhoai/manifests/xeon
+export IMAGE_LLM_TGI="YourImage"
+export IMAGE_CODEGEN="YourImage"
+export IMAGE_CODEGEN_UI="YourImage"
+sed -i "s#insert-your-image-llm-tgi#${IMAGE_LLM_TGI}#g" codegen.yaml
+sed -i "s#insert-your-image-codegen#${IMAGE_CODEGEN}#g" codegen.yaml
+sed -i "s#insert-your-image-codegen-ui#${IMAGE_CODEGEN_UI}#g" ui-server.yaml
+```
+
+On Gaudi:
+```
+cd GenAIExamples/CodeGen/openshift-rhoai/manifests/gaudi
 export IMAGE_LLM_TGI="YourImage"
 export IMAGE_CODEGEN="YourImage"
 export IMAGE_CODEGEN_UI="YourImage"
@@ -160,8 +181,17 @@ oc apply -f codegen.yaml
 ```
 
 7. Check the *codegen* route with command `oc get routes` and update the route in *ui-server.yaml* file: 
+
+On Xeon:
 ```
 cd GenAIExamples/CodeGen/openshift-rhoai/manifests/xeon
+export CODEGEN_ROUTE="YourCodegenRoute"
+sed -i "s/insert-your-codegen-route/${CODEGEN_ROUTE}/g" ui-server.yaml
+```
+
+On Gaudi:
+```
+cd GenAIExamples/CodeGen/openshift-rhoai/manifests/gaudi
 export CODEGEN_ROUTE="YourCodegenRoute"
 sed -i "s/insert-your-codegen-route/${CODEGEN_ROUTE}/g" ui-server.yaml
 ```
