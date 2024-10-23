@@ -10,15 +10,15 @@
 On Xeon:
 ```
 cd GenAIExamples/CodeGen/openshift-rhoai/manifests/xeon
-export HUGGINGFACEHUB_API_TOKEN="YourOwnToken"
-sed -i "s/insert-your-huggingface-token-here/${HUGGINGFACEHUB_API_TOKEN}/g" codegen.yaml servingruntime-magicoder.yaml
+export HFTOKEN="YourOwnToken"
+sed -i "s/insert-your-huggingface-token-here/${HFTOKEN}/g" codegen.yaml servingruntime-magicoder.yaml
 ```
 
 On Gaudi:
 ```
 cd GenAIExamples/CodeGen/openshift-rhoai/manifests/gaudi
-export HUGGINGFACEHUB_API_TOKEN="YourOwnToken"
-sed -i "s/insert-your-huggingface-token-here/${HUGGINGFACEHUB_API_TOKEN}/g" codegen.yaml servingruntime-codellama.yaml
+export HFTOKEN="YourOwnToken"
+sed -i "s/insert-your-huggingface-token-here/${HFTOKEN}/g" codegen.yaml servingruntime-codellama.yaml
 ```
 
 ## Deploy model in Red Hat Openshift AI
