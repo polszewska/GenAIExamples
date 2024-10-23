@@ -39,7 +39,7 @@ objects:
             value: /mnt/models
           - name: HUGGING_FACE_HUB_TOKEN
             value: "insert-your-huggingface-token-here"
-        image: ghcr.io/huggingface/tgi-gaudi:2.0.1
+        image: ghcr.io/huggingface/tgi-gaudi:2.0.4
         name: kserve-container
         ports:
           - containerPort: 8080
