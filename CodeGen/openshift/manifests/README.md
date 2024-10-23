@@ -10,14 +10,14 @@ On Xeon:
 ```
 cd GenAIExamples/CodeGen/openshift/manifests/xeon
 export HUGGINGFACEHUB_API_TOKEN="YourOwnToken"
-sed -i "s/insert-your-huggingface-token-here/${HUGGINGFACEHUB_API_TOKEN}/g" codegen.yaml servingruntime-magicoder.yaml
+sed -i "s/insert-your-huggingface-token-here/${HUGGINGFACEHUB_API_TOKEN}/g" codegen.yaml
 ```
 
 On Gaudi:
 ```
 cd GenAIExamples/CodeGen/openshift/manifests/gaudi
 export HUGGINGFACEHUB_API_TOKEN="YourOwnToken"
-sed -i "s/insert-your-huggingface-token-here/${HUGGINGFACEHUB_API_TOKEN}/g" codegen.yaml servingruntime-codellama.yaml
+sed -i "s/insert-your-huggingface-token-here/${HUGGINGFACEHUB_API_TOKEN}/g" codegen.yaml
 ```
 
 ## Deploy CodeGen
