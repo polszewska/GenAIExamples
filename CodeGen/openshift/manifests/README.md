@@ -52,10 +52,22 @@ docker push <openshift-image-registry_route>/<namespace>/<image_name>:<tag>
 ```
 To verify run the command: `oc get istag`.
 
-3. Update images names in manifest files:
+3. Update images names in manifest files.
 
+On Xeon:
 ```
 cd GenAIExamples/CodeGen/openshift/manifests/xeon
+export IMAGE_LLM_TGI="YourImage"
+export IMAGE_CODEGEN="YourImage"
+export IMAGE_CODEGEN_UI="YourImage"
+sed -i "s#insert-your-image-llm-tgi#${IMAGE_LLM_TGI}#g" codegen.yaml
+sed -i "s#insert-your-image-codegen#${IMAGE_CODEGEN}#g" codegen.yaml
+sed -i "s#insert-your-image-codegen-ui#${IMAGE_CODEGEN_UI}#g" ui-server.yaml
+```
+
+On Gaudi:
+```
+cd GenAIExamples/CodeGen/openshift/manifests/gaudi
 export IMAGE_LLM_TGI="YourImage"
 export IMAGE_CODEGEN="YourImage"
 export IMAGE_CODEGEN_UI="YourImage"
