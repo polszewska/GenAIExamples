@@ -5,11 +5,20 @@
 1. **Red Hat OpenShift Cluster** with dynamic *StorageClass* to provision *PersistentVolumes* e.g. **OpenShift Data Foundation**) and installed Operators: **Red Hat - Authorino (Technical Preview)**, **Red Hat OpenShift Service Mesh**, **Red Hat OpenShift Serverless** and **Red Hat Openshift AI**.
 2. Exposed image registry to push there docker images (https://docs.openshift.com/container-platform/4.16/registry/securing-exposing-registry.html).
 3. Access to S3-compatible object storage bucket (e.g. **OpenShift Data Foundation**, **AWS S3**) and values of access and secret access keys and S3 endpoint (https://docs.redhat.com/en/documentation/red_hat_openshift_data_foundation/4.16/html/managing_hybrid_and_multicloud_resources/accessing-the-multicloud-object-gateway-with-your-applications_rhodf#accessing-the-multicloud-object-gateway-with-your-applications_rhodf)\
-4. Account on https://huggingface.co/, access to model ise-uiuc/Magicoder-S-DS-6.7B and token with _Read permissions_. Update the access token in your repository:
+4. Account on https://huggingface.co/, access to model _ise-uiuc/Magicoder-S-DS-6.7B_ (for Xeon) or _meta-llama/CodeLlama-7b-hf_ (for Gaudi)  and token with _Read permissions_. Update the access token in your repository using followind commands.
+
+On Xeon:
 ```
 cd GenAIExamples/CodeGen/openshift-rhoai/manifests/xeon
 export HUGGINGFACEHUB_API_TOKEN="YourOwnToken"
 sed -i "s/insert-your-huggingface-token-here/${HUGGINGFACEHUB_API_TOKEN}/g" codegen.yaml servingruntime-magicoder.yaml
+```
+
+On Gaudi:
+```
+cd GenAIExamples/CodeGen/openshift-rhoai/manifests/gaudi
+export HUGGINGFACEHUB_API_TOKEN="YourOwnToken"
+sed -i "s/insert-your-huggingface-token-here/${HUGGINGFACEHUB_API_TOKEN}/g" codegen.yaml servingruntime-codellama.yaml
 ```
 
 ## Deploy model in Red Hat Openshift AI

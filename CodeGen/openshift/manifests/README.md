@@ -4,7 +4,7 @@
 
 1. **Red Hat OpenShift Cluster** with dynamic *StorageClass* to provision *PersistentVolumes* e.g. **OpenShift Data Foundation**)
 2. Exposed image registry to push there docker images (https://docs.openshift.com/container-platform/4.16/registry/securing-exposing-registry.html).
-3. Account on https://huggingface.co/, access to model ise-uiuc/Magicoder-S-DS-6.7B and token with _Read permissions_. Update the access token in your repository:
+3. Account on https://huggingface.co/, access to model ise-uiuc/Magicoder-S-DS-6.7B (for Xeon) or meta-llama/CodeLlama-7b-hf (for Gaugi) and token with _Read permissions_. Update the access token in your repository:
 ```
 cd GenAIExamples/CodeGen/openshift/manifests/xeon
 export HUGGINGFACEHUB_API_TOKEN="YourOwnToken"
@@ -12,7 +12,7 @@ sed -i "s/insert-your-huggingface-token-here/${HUGGINGFACEHUB_API_TOKEN}/g" code
 ```
 You can also customize the "MODEL_ID" and "model-volume".
 
-## Deploy CodeGen On Xeon
+## Deploy CodeGen
 
 1. Build docker images locally
 
