@@ -9,15 +9,15 @@
 On Xeon:
 ```
 cd GenAIExamples/CodeGen/openshift/manifests/xeon
-export HUGGINGFACEHUB_API_TOKEN="YourOwnToken"
-sed -i "s/insert-your-huggingface-token-here/${HUGGINGFACEHUB_API_TOKEN}/g" codegen.yaml
+export HFTOKEN="YourOwnToken"
+sed -i "s/insert-your-huggingface-token-here/${HFTOKEN}/g" codegen.yaml
 ```
 
 On Gaudi:
 ```
 cd GenAIExamples/CodeGen/openshift/manifests/gaudi
-export HUGGINGFACEHUB_API_TOKEN="YourOwnToken"
-sed -i "s/insert-your-huggingface-token-here/${HUGGINGFACEHUB_API_TOKEN}/g" codegen.yaml
+export HFTOKEN="YourOwnToken"
+sed -i "s/insert-your-huggingface-token-here/${HFTOKEN}/g" codegen.yaml
 ```
 
 ## Deploy CodeGen
