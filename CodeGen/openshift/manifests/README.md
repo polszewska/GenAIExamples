@@ -81,9 +81,18 @@ sed -i "s#insert-your-image-codegen-ui#${IMAGE_CODEGEN_UI}#g" ui-server.yaml
 oc apply -f codegen.yaml
 ```
 
-5. Check the *codegen* route with command `oc get routes` and update the route in *ui-server.yaml* file: 
+5. Check the *codegen* route with command `oc get routes` and update the route in *ui-server.yaml* file.
+
+On Xeon:
 ```
 cd GenAIExamples/CodeGen/openshift/manifests/xeon
+export CODEGEN_ROUTE="YourCodegenRoute"
+sed -i "s/insert-your-codegen-route/${CODEGEN_ROUTE}/g" ui-server.yaml
+```
+
+On Gaudi:
+```
+cd GenAIExamples/CodeGen/openshift/manifests/gaudi
 export CODEGEN_ROUTE="YourCodegenRoute"
 sed -i "s/insert-your-codegen-route/${CODEGEN_ROUTE}/g" ui-server.yaml
 ```
