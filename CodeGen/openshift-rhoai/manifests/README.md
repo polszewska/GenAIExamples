@@ -37,7 +37,7 @@ cd GenAIExamples/CodeGen/openshift-rhoai/manifests/gaudi
 oc apply -f servingruntime-codellama.yaml
 ```
 
-Verify if template has been created with ```oc get template -A | grep tgi-magicoder``` command.
+Verify if template has been created with ```oc get template -n redhat-ods-applications``` command.
 
 2. Find the route for **Red Hat OpenShift AI** dashboard with below command and open it in the browser:
 ```
