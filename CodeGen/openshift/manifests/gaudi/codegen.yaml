@@ -177,7 +177,7 @@ spec:
               command:
                 - python 
                 - -c 
-                - 'import requests; req = requests.get("http://codegen-tgi:8080"); print(req)'
+                - 'import requests; req = requests.get("http://codegen-tgi:8080/info"); print(req)'
             initialDelaySeconds: 5
             periodSeconds: 5
             failureThreshold: 120
