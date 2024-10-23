@@ -101,7 +101,7 @@ spec:
             - name: HF_TOKEN
               value: "insert-your-huggingface-token-here"
           securityContext: {}
-          image: "ghcr.io/huggingface/text-generation-inference:1.4"
+          image: "ghcr.io/huggingface/text-generation-inference:2.1.0"
           imagePullPolicy: IfNotPresent
           volumeMounts:
             - mountPath: /data
